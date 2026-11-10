@@ -1,0 +1,86 @@
+# source: https://github.com/mmajewsk-teaching/ml_env_wfiis/commit/72ab0637c87e9661c03eb8dd6f0fce2eab7f63a3
+[workspace]
+name = "ml-env-204"
+platforms = ["linux-64"]
+channels = [
+  "nvidia/label/cuda-11.8.0",
+  "nvidia",
+  "conda-forge",
+]
+
+[dependencies]
+python = "3.12.*"
+numpy = "*"
+matplotlib = "*"
+pandas = ">=3.0.2,<4"
+jupyterlab = "*"
+jupytext = "*"
+scikit-learn = ">=1.8.0,<2"
+transformers = "*"
+nltk = "*"
+langchain = "*"
+langchain-community = "*"
+langchain-ollama = "*"
+langgraph = "*"
+pillow = "*"
+tqdm = "*"
+fastapi = ">=0.136.0,<0.137"
+uvicorn = "*"
+sqlalchemy = ">=2.0"
+pydantic = "*"
+requests = "*"
+httpx = "*"
+loguru = "*"
+adversarial-robustness-toolbox = ">=1.20.1,<2"
+
+[pypi-dependencies]
+sqlite-vec = "*"
+
+[feature.cuda.dependencies]
+cuda = { version = "*", channel = "nvidia/label/cuda-11.8.0" }
+cuda-version = "11.8.*"  # without this the solver mixes CUDA 11.8/12.x/13.x packages
+gxx = "11.*"
+gcc = "11.*"
+
+# torch from PyPI: the pytorch conda channel stops at 2.5.1, transformers needs >=2.6; 2.7.1 is the last cu118 build
+[feature.cuda.pypi-dependencies]
+torch = { version = "==2.7.1", index = "https://download.pytorch.org/whl/cu118" }
+torchvision = { version = "==0.22.1", index = "https://download.pytorch.org/whl/cu118" }
+
+[feature.cpu.pypi-dependencies]
+torch = { version = "==2.7.1", index = "https://download.pytorch.org/whl/cpu" }
+torchvision = { version = "==0.22.1", index = "https://download.pytorch.org/whl/cpu" }
+
+[feature.garak.dependencies]
+python = "3.12.*"
+[feature.garak.pypi-dependencies]
+garak = "==0.17.1"
+
+[feature.nemo.dependencies]
+python = "3.12.*"
+[feature.nemo.pypi-dependencies]
+nemoguardrails = "==0.24.1"
+ipykernel = "*"
+
+[feature.nemo.activation.env]
+NEMO_GUARDRAILS_NO_USAGE_STATS = "1"
+
+[feature.guardrails.dependencies]
+python = "3.12.*"
+[feature.guardrails.pypi-dependencies]
+guardrails-ai = "==0.11.0"
+ipykernel = "*"
+
+[feature.promptfoo.dependencies]
+nodejs = ">=22"
+
+[environments]
+default = { features = ["cuda"] }
+cpu = { features = ["cpu"] }
+garak = { features = ["garak"], no-default-feature = true }
+nemo = { features = ["nemo"], no-default-feature = true }
+guardrails = { features = ["guardrails"], no-default-feature = true }
+promptfoo = { features = ["promptfoo"], no-default-feature = true }
+
+[activation.env]
+HF_HOME = "$PIXI_PROJECT_ROOT/data/hf_cache"
